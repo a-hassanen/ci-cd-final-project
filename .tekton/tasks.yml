@@ -52,10 +52,11 @@ spec:
       script: |
         #!/bin/bash
         set -e
-        echo "Installing system build dependencies..."
-        apt-get update && apt-get install -y gcc g++ make
-        echo "Upgrading pip and installing dependencies..."
+        echo "Installing build dependencies..."
+        apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
+        echo "Upgrading pip, setuptools, and wheel..."
         python -m pip install --upgrade pip setuptools wheel
+        echo "Installing project dependencies..."
         pip install -r requirements.txt
         echo "Running nose tests..."
         nosetests $(params.args)
