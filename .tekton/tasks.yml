@@ -45,20 +45,11 @@ spec:
       default: "-v"
   steps:
     - name: nosetests
-      image: python:3.11-slim
+      image: python:3.9-slim
       workingDir: $(workspaces.source.path)
       script: |
         #!/bin/bash
         set -e
-        echo "Upgrading pip to latest stable version..."
-        python -m pip install --upgrade pip setuptools wheel
-        /usr/local/bin/python -m pip install --upgrade pip setuptools wheel
-        
-        echo "Installing required system build dependencies..."
-        apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
-        
-        echo "Installing project dependencies from requirements.txt..."
+        python -m pip install --upgrade pip wheel
         pip install -r requirements.txt
-        
-        echo "Running nose tests..."
         nosetests $(params.args)
