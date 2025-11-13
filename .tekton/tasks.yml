@@ -52,6 +52,7 @@ spec:
         set -e
         echo "Upgrading pip to latest stable version..."
         python -m pip install --upgrade pip setuptools wheel
+        /usr/local/bin/python -m pip install --upgrade pip setuptools wheel
         
         echo "Installing required system build dependencies..."
         apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
@@ -61,4 +62,3 @@ spec:
         
         echo "Running nose tests..."
         nosetests $(params.args)
-        
