@@ -22,7 +22,6 @@ spec:
         set -eu
         echo "Removing all files from ${WORKSPACE_SOURCE_PATH} ..."
         # Delete any existing contents of the directory if it exists.
-        #
         # We don't just "rm -rf ${WORKSPACE_SOURCE_PATH}" because ${WORKSPACE_SOURCE_PATH} might be "/"
         # or the root of a mounted volume.
         if [ -d "${WORKSPACE_SOURCE_PATH}" ] ; then
@@ -53,6 +52,10 @@ spec:
       script: |
         #!/bin/bash
         set -e
-        python -m pip install --upgrade pip wheel
+        echo "Installing system build dependencies..."
+        apt-get update && apt-get install -y gcc g++ make
+        echo "Upgrading pip and installing dependencies..."
+        python -m pip install --upgrade pip setuptools wheel
         pip install -r requirements.txt
+        echo "Running nose tests..."
         nosetests $(params.args)
