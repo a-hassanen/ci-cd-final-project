@@ -48,18 +48,21 @@ spec:
       image: python:3.9-slim
       workingDir: $(workspaces.source.path)
       script: |
-        #!/bin/bash
-        set -e
+          #!/bin/bash
+          set -e
 
-        echo "Upgrading pip, setuptools, and wheel to latest compatible versions..."
-        python -m pip install --upgrade pip setuptools wheel
+          echo "Upgrading pip, setuptools, and wheel..."
+          python -m pip install --upgrade pip setuptools wheel
 
-        echo "Installing system build dependencies..."
-        apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
+          echo "Installing system build dependencies..."
+          apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
 
-        echo "Installing Python dependencies..."
-        pip install --upgrade pip  # ensure latest pip
-        pip install -r requirements.txt
+          echo "Installing Python dependencies..."
+          pip install -r requirements.txt
 
-        echo "Running nose tests..."
-        nosetests $(params.args)
+          echo "Running flake8 linting..."
+          pip install flake8  # ensures flake8 is available
+          flake8 $(workspaces.source.path)
+
+          echo "Running nose tests..."
+          nosetests $(params.args)
