@@ -50,11 +50,15 @@ spec:
       script: |
         #!/bin/bash
         set -e
-        echo "Installing build dependencies..."
-        apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
-        echo "Upgrading pip, setuptools, and wheel..."
+        echo "Upgrading pip to latest stable version..."
         python -m pip install --upgrade pip setuptools wheel
-        echo "Installing project dependencies..."
+        
+        echo "Installing required system build dependencies..."
+        apt-get update && apt-get install -y --no-install-recommends gcc g++ make libffi-dev libssl-dev
+        
+        echo "Installing project dependencies from requirements.txt..."
         pip install -r requirements.txt
+        
         echo "Running nose tests..."
         nosetests $(params.args)
+        
